@@ -17,9 +17,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar todo el proyecto
 COPY . .
 
-# Exponer puerto para Render
-EXPOSE 10000
+# Exponer puerto (opcional)
+EXPOSE 5000
 
-# Ejecutar app con Gunicorn para producción
-# --bind 0.0.0.0:$PORT usa la variable de entorno PORT de Render
-CMD ["gunicorn", "--bind", "0.0.0.0:10000", "app:app"]
+# Ejecutar app con Gunicorn usando el puerto asignado por Render
+CMD ["gunicorn", "--bind", "0.0.0.0:$PORT", "app:app"]

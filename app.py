@@ -2,14 +2,11 @@ from flask import Flask, render_template, request, redirect, session
 import json
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
-
 from datetime import timedelta
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey")
-
-# Configurar que la sesión se cierre al cerrar el navegador
-app.permanent_session_lifetime = timedelta(minutes=30)  # opcional para sesiones permanentes
+app.permanent_session_lifetime = timedelta(minutes=30)
 
 usuarios_file = "usuarios.json"
 
@@ -34,9 +31,7 @@ class Cuenta:
         self.gastos.append({"concepto": concepto, "monto": monto})
 
     def calcular_balance(self):
-        total_ingresos = sum(i["monto"] for i in self.ingresos)
-        total_gastos = sum(g["monto"] for g in self.gastos)
-        return total_ingresos - total_gastos
+        return sum(i["monto"] for i in self.ingresos) - sum(g["monto"] for g in self.gastos)
 
     def obtener_detalle(self):
         return {
@@ -103,7 +98,6 @@ def login():
         contrasena_input = request.form.get("contrasena", "").strip()
         accion = request.form.get("accion")
 
-        # Validar campos vacíos
         if not usuario_input or not contrasena_input:
             mensaje = "Por favor complete todos los campos."
             return render_template("login.html", mensaje=mensaje)
@@ -113,7 +107,7 @@ def login():
         if accion == "login":
             if usuario_input in usuarios:
                 if check_password_hash(usuarios[usuario_input]["password"], contrasena_input):
-                    session.permanent = False  # Sesión temporal que se borra al cerrar navegador
+                    session.permanent = False
                     session["usuario"] = usuario_input
                     movimientos = usuarios[usuario_input].get("movimientos", {})
                     usuarios_objetos[usuario_input] = Usuario(usuario_input, movimientos)
@@ -127,7 +121,6 @@ def login():
             if usuario_input in usuarios:
                 mensaje = "El usuario ya existe. Elija otro nombre."
             else:
-                # Guardar nuevo usuario
                 usuarios[usuario_input] = {
                     "password": generate_password_hash(contrasena_input),
                     "movimientos": {"ingresos": [], "gastos": []}
@@ -147,7 +140,6 @@ def dashboard():
 
     usuario_actual = session["usuario"]
 
-    # Crear objeto Usuario si no existe en memoria
     if usuario_actual not in usuarios_objetos:
         usuarios = cargar_usuarios()
         movimientos = usuarios.get(usuario_actual, {}).get("movimientos", {})
@@ -171,7 +163,6 @@ def dashboard():
             else:
                 user_obj.agregar_gasto(monto, concepto)
 
-            # Guardar solo si no hay error
             usuarios = cargar_usuarios()
             usuarios[usuario_actual]["movimientos"] = user_obj.ver_detalle()
             guardar_usuarios(usuarios)
@@ -193,6 +184,5 @@ def logout():
     return redirect("/")
 
 if __name__ == "__main__":
-    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
