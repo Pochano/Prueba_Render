@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Economía Familiar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Economía Familiar</h1>
+    {% if mensaje %}
+        <p style="color:red;">{{ mensaje }}</p>
+    {% endif %}
+
+    <form method="post">
+        <label>Usuario:</label>
+        <input type="text" name="usuario" required>
+
+        <label>Contraseña:</label>
+        <input type="password" name="contrasena" required>
+
+        <button type="submit" name="accion" value="login">Iniciar Sesión</button>
+        <button type="submit" name="accion" value="register">Registrar</button>
+    </form>
+</div>
+</body>
+</html>

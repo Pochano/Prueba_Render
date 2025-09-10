@@ -1,0 +1,16 @@
+{
+    "Pochano": {
+        "password": "scrypt:32768:8:1$lrHqnyCDqsvZVtlv$a1e92d5e17cb444c358f271f048dd2fb22923f2337c47be68707521308a54db894e526d9603008e3eeeb57c161060335f363e18b059fc4493734930d56111a16",
+        "movimientos": {
+            "ingresos": [],
+            "gastos": []
+        }
+    },
+    "Miguel": {
+        "password": "scrypt:32768:8:1$fZHOyqEuPLFQdDUi$55a6ecce7acbae35807e4845afe06c9527d8e8d7135d2e9478fa1356712c7fbce6271405878c4e012fd9c4d0603e906f64c586c2eb802912d27316366b1eefe9",
+        "movimientos": {
+            "ingresos": [],
+            "gastos": []
+        }
+    }
+}
